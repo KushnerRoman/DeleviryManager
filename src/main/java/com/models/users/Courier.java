@@ -29,15 +29,17 @@ public class Courier extends User implements Serializable{
 	@OneToMany
 	@JoinTable(name="courier_vs_delivery", joinColumns = @JoinColumn(name="courier_id"),inverseJoinColumns = @JoinColumn(name="delivery_id"))
 	private List<Delivery> deliveries;
+	
+	
 
 	public Courier () {
-		
+		role=UserTypeUtils.COURIER;
 	}
 
 
 	public Courier (String firstName,String lastName,String email,String password ) {
 		deliveries=new ArrayList<Delivery>();
-		this.role=UserTypeUtils.COURIER;
+		
 		this.firstName=firstName;
 		this.lastName=lastName;
 		this.email=email;

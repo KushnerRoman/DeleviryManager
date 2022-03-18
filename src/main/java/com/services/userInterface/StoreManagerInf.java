@@ -74,9 +74,10 @@ public interface StoreManagerInf {
 	 *
 	 * @See {@link #isExistsCourierByEmail(String)}
 	 * @param couirer courier to create
+	 * @return courier
 	 * @throws CourierExistsException
 	 */
-	public void addNewCourier(Courier couirer) throws CourierExistsException ;
+	public Courier addNewCourier(Courier couirer) throws CourierExistsException ;
 	
 	
 	/**

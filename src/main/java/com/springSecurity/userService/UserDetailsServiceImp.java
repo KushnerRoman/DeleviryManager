@@ -18,8 +18,8 @@ public class UserDetailsServiceImp implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		if(courierRepo.findByEmail(username).isPresent()) {
-			User user = courierRepo.findByEmail(username).get();
+		if(courierRepo.findByEmailIgnoreCase(username).isPresent()) {
+			User user = courierRepo.findByEmailIgnoreCase(username).get();
 			return UserPrinciple.build(user);
 		}
 		

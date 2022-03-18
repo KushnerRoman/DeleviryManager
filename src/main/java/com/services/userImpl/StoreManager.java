@@ -1,5 +1,6 @@
 package com.services.userImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.models.order.Order;
 import com.models.users.Courier;
 import com.repository.CourierRepository;
 import com.repository.DeliveryRepository;
+import com.repository.OrderRepository;
 import com.services.userInterface.StoreManagerInf;
 
 @Service
@@ -23,28 +25,36 @@ public class StoreManager implements StoreManagerInf {
 	CourierRepository courierRepo;
 	@Autowired
 	DeliveryRepository deliveryRepo;
+	@Autowired
+	OrderRepository orderRepo;
 	
 	@Override
 	public boolean isExistsCourierByEmail(String email) {
 
-		
 		return courierRepo.findByEmailIgnoreCase(email).isPresent();
 	}
 
 	@Override
 	public boolean isExistsCourierById(long id) {
-		if(deliveryRepo.existsById(id))return true;
-		return false;
+		return deliveryRepo.existsById(id);
 	}
 
 	@Override
 	public boolean isExistsOrder(Order order) {
 		
-		return false;
+		Optional<Long> opOrderId=Optional.of(order.getId());
+
+		if(opOrderId.isPresent()) return orderRepo.existsById(opOrderId.get());
+		  
+		return false ;
 	}
 
 	@Override
 	public boolean isExistsDelivery(Delivery delivery) {
+		
+		Optional<Long> opDeliveryId=(Optional<Long>) Optional.of(delivery.getId());
+		
+		if(opDeliveryId.isPresent()) return deliveryRepo.existsById(opDeliveryId.get());
 		
 		return false;
 	}
@@ -65,17 +75,31 @@ public class StoreManager implements StoreManagerInf {
 	@Override
 	public Optional<Order> getAllOrders() {
 		
+		
+		
 		return null;
 	}
 
 	@Override
-	public void addNewCourier(Courier couirer) throws CourierExistsException {
+	public Courier addNewCourier(Courier couirer) throws CourierExistsException {
+		if(!isExistsCourierByEmail(couirer.getEmail())) {
+			courierRepo.saveAndFlush(couirer);
+		}else {
+			throw new CourierExistsException("Courier by those values already exist");
+		}
+		return couirer;
+		
 		
 
 	}
 
 	@Override
 	public void addNewOrder(Order order) throws OrderExistException {
+		
+		if(!isExistsOrder(order)) {
+			orderRepo.saveAndFlush(order);
+			
+		}
 		
 
 	}

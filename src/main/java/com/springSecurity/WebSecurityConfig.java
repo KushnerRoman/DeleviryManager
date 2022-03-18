@@ -52,14 +52,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/apis/**").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	/**
+	 *
+	 */
+	
+	/*
+	 *@Override
+	 * protected void configure(HttpSecurity http) throws Exception {
+	 * http.cors().and().csrf().disable().authorizeRequests().antMatchers("/apis/**"
+	 * ).permitAll().anyRequest()
+	 * .authenticated().and().exceptionHandling().authenticationEntryPoint(
+	 * unauthorizedHandler).and()
+	 * .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	 * 
+	 * http.addFilterBefore(authenticationJwtTokenFilter(),
+	 * UsernamePasswordAuthenticationFilter.class); }
+	 */
+	 @Override
+	    protected void configure(HttpSecurity http) throws Exception {
+	        http.cors().and().csrf().disable()
+	                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+	                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+	                .authorizeRequests().antMatchers("/api/auth/**").permitAll() 
+	                .antMatchers("/api/test/**").permitAll() // permit the class of test
+	                .antMatchers("/**").permitAll() // permit all the routers after swagger-ui.html
+	                .anyRequest().authenticated();
 
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
+	        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	    }
+	
 	
 	  @Override 
 	  public void configure(WebSecurity web) throws Exception {

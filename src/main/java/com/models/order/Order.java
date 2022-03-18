@@ -19,10 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public  class Order {
@@ -47,6 +43,46 @@ public  class Order {
 			+ "minute - 0 to 59\r\n"
 			+ "second - 0 to 59")
 	protected Time orderTime;
+	Order(String customerName, double price, Date orderDate, Time orderTime) {
+		
+		this.customerName = customerName;
+		this.price = price;
+		this.orderDate = orderDate;
+		this.orderTime = orderTime;
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	Order() {
+		super();
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	public Time getOrderTime() {
+		return orderTime;
+	}
+	public void setOrderTime(Time orderTime) {
+		this.orderTime = orderTime;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(customerName, orderDate, orderTime, price);
