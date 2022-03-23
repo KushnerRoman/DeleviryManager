@@ -6,15 +6,21 @@ import java.sql.Time;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.models.users.Courier;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +38,21 @@ public class Delivery extends Order implements Serializable{
 	 */
 	private static final long serialVersionUID = -8094226237592643559L;
 
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	protected long id;
+	@Column
+	@ApiModelProperty(value="city name")
 	private String city;
-	
+	@Column
+	@ApiModelProperty(value="street name")
 	private String street;
-	
+	@Column
+	@ApiModelProperty(value="house number number name")
 	private String streetNum;
 	
-	@ManyToOne(cascade = CascadeType.ALL, targetEntity = Courier.class)
+	@ManyToOne(cascade = CascadeType.ALL, targetEntity = Courier.class ,optional = true)
 	@JoinTable(name="courier_vs_delivery",joinColumns = @JoinColumn(name="delivery_id"),inverseJoinColumns = @JoinColumn(name="courier_id"))
 	@JsonBackReference
 	public long courierId;
@@ -48,42 +62,20 @@ public class Delivery extends Order implements Serializable{
 	}
 
 
-	public Delivery(String city, String street, String streetNum,Date orderDate,Time orderTime) {
+	public Delivery(String city, String street, String streetNum,Date orderDate,Time orderTime,double price,String customerName) {
 		this.orderDate=orderDate;
 		this.orderTime=orderTime;
 		this.city = city;
 		this.street = street;
 		this.streetNum = streetNum;
+		this.price=price;
+		this.customerName=customerName;
 	}
 	
 
 
-	@Override
-	public String toString() {
-		return "Delivery [city=" + city + ", street=" + street + ", streetNum=" + streetNum + ", id=" + id
-				+ ", customerName=" + customerName + ", price=" + price + ", orderDate=" + orderDate + ", orderTime="
-				+ orderTime + "]";
-	}
 
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(city, courierId, street, streetNum);
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Delivery other = (Delivery) obj;
-		return Objects.equals(city, other.city) && courierId == other.courierId && Objects.equals(street, other.street)
-				&& Objects.equals(streetNum, other.streetNum);
-	}
 	
 
 	

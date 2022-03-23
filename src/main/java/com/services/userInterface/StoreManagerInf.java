@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.exceptions.courierExceptions.CourierExistsException;
 import com.exceptions.courierExceptions.CourierNotExistsException;
+import com.exceptions.orderExceptions.DeliveryExistException;
 import com.exceptions.orderExceptions.OrderExistException;
 import com.exceptions.orderExceptions.OrderNotExistException;
 import com.models.order.Delivery;
@@ -87,8 +88,19 @@ public interface StoreManagerInf {
 	 * @param order order to create
 	 * @throws OrderExistException
 	 */
+	
 	@SuppressWarnings("javadoc")
-	public void addNewOrder(Order order) throws OrderExistException;
+	public Order addNewOrder(Order order) throws OrderExistException;
+	
+	
+	/**
+	 * reconstruct order to delivery and save it in DB
+	 * 
+	 * @param delivery
+	 * @return the delivery that was created
+	 * @throws DeliveryExistException
+	 */
+	public Delivery addNewDelivery(Delivery delivery) throws DeliveryExistException;
 	
 	/**
 	 * edit courier only if exists

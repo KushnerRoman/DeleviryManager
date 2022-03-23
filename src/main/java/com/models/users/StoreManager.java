@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.utils.ServiceUtils.UserTypeUtils;
 
 @Entity
-@Table(name="StoreManager")
+@Table(name="StoreManagerService")
 public class StoreManager extends User implements Serializable {
 
 	/**

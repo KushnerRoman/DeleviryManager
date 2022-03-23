@@ -6,22 +6,22 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import com.utils.ServiceUtils.OrderTypeUtils;
+
 import io.swagger.annotations.ApiModelProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public  class Order {
+public abstract  class Order  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -30,6 +30,10 @@ public  class Order {
 	@Column(nullable = false)
 	@ApiModelProperty( value=" Min=1 Max=255 " )
 	protected String customerName;
+	
+	@Column
+	@ApiModelProperty(value="the phone number of the customer as String ")
+	protected String phoneNumber;
 	
 	@Column(nullable = false )
 	@ApiModelProperty( value=" Min=1 Max=9999 " )
@@ -43,13 +47,11 @@ public  class Order {
 			+ "minute - 0 to 59\r\n"
 			+ "second - 0 to 59")
 	protected Time orderTime;
-	Order(String customerName, double price, Date orderDate, Time orderTime) {
-		
-		this.customerName = customerName;
-		this.price = price;
-		this.orderDate = orderDate;
-		this.orderTime = orderTime;
-	}
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	protected OrderTypeUtils orderType;
+
 	public long getId() {
 		return id;
 	}
@@ -59,9 +61,7 @@ public  class Order {
 	public String getCustomerName() {
 		return customerName;
 	}
-	Order() {
-		super();
-	}
+	
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
@@ -83,9 +83,21 @@ public  class Order {
 	public void setOrderTime(Time orderTime) {
 		this.orderTime = orderTime;
 	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public OrderTypeUtils getOrderType() {
+		return orderType;
+	}
+	public void setOrderType(OrderTypeUtils orderType) {
+		this.orderType = orderType;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerName, orderDate, orderTime, price);
+		return Objects.hash(customerName, id, orderDate, orderTime, orderType, phoneNumber, price);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -96,10 +108,12 @@ public  class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		return Objects.equals(customerName, other.customerName) && Objects.equals(orderDate, other.orderDate)
-				&& Objects.equals(orderTime, other.orderTime)
+		return Objects.equals(customerName, other.customerName) && id == other.id
+				&& Objects.equals(orderDate, other.orderDate) && Objects.equals(orderTime, other.orderTime)
+				&& orderType == other.orderType && Objects.equals(phoneNumber, other.phoneNumber)
 				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price);
 	}
+
 	
 	
 }

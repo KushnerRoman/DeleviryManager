@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.exceptions.courierExceptions.CourierExistsException;
 import com.exceptions.courierExceptions.CourierNotExistsException;
+import com.exceptions.orderExceptions.DeliveryExistException;
 import com.exceptions.orderExceptions.OrderExistException;
 import com.exceptions.orderExceptions.OrderNotExistException;
 import com.models.order.Delivery;
@@ -19,7 +20,7 @@ import com.repository.OrderRepository;
 import com.services.userInterface.StoreManagerInf;
 
 @Service
-public class StoreManager implements StoreManagerInf {
+public class StoreManagerService implements StoreManagerInf {
 
 	@Autowired
 	CourierRepository courierRepo;
@@ -84,25 +85,41 @@ public class StoreManager implements StoreManagerInf {
 	public Courier addNewCourier(Courier couirer) throws CourierExistsException {
 		if(!isExistsCourierByEmail(couirer.getEmail())) {
 			courierRepo.saveAndFlush(couirer);
+			return couirer;
 		}else {
 			throw new CourierExistsException("Courier by those values already exist");
 		}
-		return couirer;
+
 		
 		
 
 	}
 
 	@Override
-	public void addNewOrder(Order order) throws OrderExistException {
+	public Order addNewOrder(Order order) throws OrderExistException {
 		
 		if(!isExistsOrder(order)) {
 			orderRepo.saveAndFlush(order);
-			
+			return order;
+		}else {
+			throw new OrderExistException("Order by already exist");
 		}
 		
 
 	}
+	@Override
+	public Delivery addNewDelivery(Delivery delivery) throws DeliveryExistException {
+	
+		if(!isExistsDelivery(delivery)) {
+			deliveryRepo.saveAndFlush(delivery);
+			return delivery;
+			
+		}else {
+			throw new DeliveryExistException("Delivery already exist");
+		}		
+	}
+	
+	
 
 	@Override
 	public void editCourier(Courier courier) throws CourierNotExistsException {
@@ -127,6 +144,8 @@ public class StoreManager implements StoreManagerInf {
 	
 		return null;
 	}
+
+
 
 
 }

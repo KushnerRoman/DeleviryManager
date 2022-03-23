@@ -30,21 +30,23 @@ public abstract class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-
-
 	protected long id;
 	
 	@Column(nullable = false ,unique = true)
 	@ApiModelProperty(example = "name@email.com", value=" Min=1 Max=255 " )
 	protected String email;
+	
 	@ApiModelProperty(value = "Min=1, Max=255.")
 	protected String password;	
+	
 	@Column(nullable = false ,unique = false)
 	@ApiModelProperty(value = "Min=1, Max=12 ")
 	protected String firstName;
+	
 	@Column(nullable = false ,unique = false)
 	@ApiModelProperty(value = "Min=1, Max=15 ")
 	protected String lastName;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	public UserTypeUtils role;

@@ -1,7 +1,7 @@
 package com.utils.modelUtils;
 
 /*
- *  {@code enum} the Enum contain all the entities that exist in the application;
+ *  {@code enum} the Enum contain all the uder type entities that exist in the application;
  * 
  * <p>
  * <li>The method {@code toString} should be used after specifying which
@@ -13,7 +13,7 @@ package com.utils.modelUtils;
  * 
  * */
 
-public enum ModelEnityUtils {
+public enum UserEnityUtils {
 	
 	COURIER,CUSTOMER,SHIFT_MANAGER,STORE_MANAGER,LOGGER;
 
