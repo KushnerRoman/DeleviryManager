@@ -12,7 +12,11 @@ import com.models.users.Courier;
 @EnableJpaRepositories
 public interface CourierRepository extends JpaRepository<Courier, Long> {
 
-	public Optional<Courier> findByEmailIgnoreCase(String email);
+
+
+
+
+	public Optional<Courier> findByLoginIgnoreCase(String login);
 	
 	
 	

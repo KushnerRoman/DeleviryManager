@@ -1,27 +1,30 @@
 package com.services.userInterface;
 
+import java.sql.Time;
+import java.util.List;
 import java.util.Optional;
 
 import com.exceptions.courierExceptions.CourierExistsException;
 import com.exceptions.courierExceptions.CourierNotExistsException;
+import com.exceptions.deliveryExceptions.DeliveryNotExistException;
 import com.exceptions.orderExceptions.DeliveryExistException;
-import com.exceptions.orderExceptions.OrderExistException;
 import com.exceptions.orderExceptions.OrderNotExistException;
 import com.models.order.Delivery;
 import com.models.order.Order;
 import com.models.users.Courier;
 
+
 public interface StoreManagerInf {
 
 	
 	/**
-	 * check if the courier exists by email
+	 * check if the courier exists by login
 	 * 
-	 * @param email the string email
+	 * @param login the string login
 	 * @return true if exist else false
 	 * @author RomanHP
 	 */
-	public boolean isExistsCourierByEmail(String email);
+	boolean existsCourierByLogin(String email);
 
 	/**
 	 * check if courier exists by id
@@ -30,17 +33,19 @@ public interface StoreManagerInf {
 	 * @return true if exist else false
 	 * @author RomanHP
 	 */
-	public boolean isExistsCourierById(long id);
+	public boolean existsCourierById(Long id);
 	
 	/**
-	 * check if the oder exists by order
+	 * check if user exists by id
 	 * 
-	 * @param order the order
-	 * @return true if exist else false
+	 * @param id the id of user
+	 * @return true if exist 
 	 * @author RomanHP
 	 */
-	public boolean isExistsOrder(Order order);
+	public boolean existsUser(Long id);
 	
+	
+
 	/**
 	 * check if delivery exists
 	 * 
@@ -48,7 +53,7 @@ public interface StoreManagerInf {
 	 * @return true if exist else false
 	 * @author RomanHP
 	 */
-	public boolean isExistsDelivery(Delivery delivery);
+	public boolean existsDelivery(Delivery delivery);
 	
 	/**
 	 * check if the order exists by id
@@ -58,18 +63,18 @@ public interface StoreManagerInf {
 	 * @return true if exist else false
 	 * @author RomanHP
 	 */
-	public boolean isExistsOrderById(long id);
+	public boolean existsDeliveryById(Long id);
 	
 	/**
 	 * @return Optional List of Couriers 
 	 */
-	public Optional<Courier> getAllCouriers();
+	public List<Delivery> getAllCouriers();
 
 	
 	/**
 	 * @return Optional List of Orders
 	 */
-	public Optional<Order> getAllOrders();
+	public Optional<List<Delivery>> getAllDeliveries();
 	
 	/** add courier to DB only if not exists by email 
 	 *
@@ -81,24 +86,15 @@ public interface StoreManagerInf {
 	public Courier addNewCourier(Courier couirer) throws CourierExistsException ;
 	
 	
-	/**
-	 * add new order to DB only if not exist 
-	 * 
-	 * @see {@link #isExistOrder(Order)}
-	 * @param order order to create
-	 * @throws OrderExistException
-	 */
-	
-	@SuppressWarnings("javadoc")
-	public Order addNewOrder(Order order) throws OrderExistException;
-	
 	
 	/**
-	 * reconstruct order to delivery and save it in DB
+	 * create new delivery if time not passed 5 minutes and save it in DB
 	 * 
+	 * @see{@link #getTodayLastOrder}
 	 * @param delivery
 	 * @return the delivery that was created
 	 * @throws DeliveryExistException
+	 * @throws DeliveryNotExistException 
 	 */
 	public Delivery addNewDelivery(Delivery delivery) throws DeliveryExistException;
 	
@@ -106,11 +102,11 @@ public interface StoreManagerInf {
 	 * edit courier only if exists
 	 * 
 	 *  
-	 * @see {@link #isExistCourierById(long)}
+	 * @see {@link #isExistCourierById(Long)}
 	 * @param courier
 	 * @throws CourierNotExistsException
 	 */
-	@SuppressWarnings("javadoc")
+
 	public void editCourier(Courier courier) throws CourierNotExistsException;
 
 	
@@ -121,7 +117,7 @@ public interface StoreManagerInf {
 	 * @param order
 	 * @throws OrderNotExistException
 	 */
-	public void editOrder(Order order) throws OrderNotExistException;
+	public void editDelivery(Order order) throws OrderNotExistException;
 
 	/**
 	 * get courier by id
@@ -130,7 +126,7 @@ public interface StoreManagerInf {
 	 * @return Optional courier
 	 * @throws CourierNotExistsException
 	 */
-	public Optional<Courier> getOneCourierById(long courierId) throws CourierNotExistsException;
+	public Optional<Courier> getOneCourierById(Long courierId) throws CourierNotExistsException;
 
 	
 	/**
@@ -140,6 +136,18 @@ public interface StoreManagerInf {
 	 * @return Optional Order
 	 * @throws OrderNotExistException
 	 */
-	public Optional<Order> getOneOrderById(long orderId) throws OrderNotExistException;
+	public Optional<Order> getOneDeliveryById(Long orderId) throws OrderNotExistException;
+	
+	/**
+	 * get the last time  order that made today
+	 * 
+	 * @param date
+	 * @param phoneNumber
+	 * @return Last time order
+	 * @throws DeliveryNotExistException
+	 */
+	public Time getTodayLastOrder(String phoneNumber) throws DeliveryNotExistException;
+
+	
 
 }

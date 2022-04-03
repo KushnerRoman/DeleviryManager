@@ -1,14 +1,14 @@
 package com.utils.ServiceUtils;
 
 public enum UserTypeUtils {
-	COURIER,CUSTOEMR,SHIFT_MANAGER,STORE_MANAGER;
+	COURIER,CUSTOMER,SHIFT_MANAGER,STORE_MANAGER;
 	
 	@Override
 	public String toString() {
 		switch (this) {
 		case COURIER:
 			return "Courier";
-		case CUSTOEMR:
+		case CUSTOMER:
 			return "Customer";
 		case SHIFT_MANAGER:
 			return "Shift Manager"; 

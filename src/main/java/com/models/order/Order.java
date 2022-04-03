@@ -1,22 +1,30 @@
 package com.models.order;
 
+
 import java.sql.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.utils.ServiceUtils.OrderTypeUtils;
+
 import java.sql.Time;
+
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-import com.utils.ServiceUtils.OrderTypeUtils;
 
 import io.swagger.annotations.ApiModelProperty;
+
+
 
 
 @Entity
@@ -25,36 +33,47 @@ public abstract  class Order  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	protected long id;
+	@JsonIgnore
+	public Long id;
+	
+	@Column(name="User_Worker_ID")
+	@ApiModelProperty( value=" The id of the User who took the order " )
+	public Long userId;
 	
 	@Column(nullable = false)
 	@ApiModelProperty( value=" Min=1 Max=255 " )
-	protected String customerName;
+	public String customerName;
 	
-	@Column
+	@Column(nullable = false)
 	@ApiModelProperty(value="the phone number of the customer as String ")
-	protected String phoneNumber;
+	public String phoneNumber;
 	
 	@Column(nullable = false )
 	@ApiModelProperty( value=" Min=1 Max=9999 " )
-	protected double price;
+	public double price;
 	
 	@Column(nullable = false)
 	@ApiModelProperty(example = "yyyy-mm-dd")
-	protected Date orderDate;
+	public Date orderDate;
+	
 	@Column(nullable = false)
 	@ApiModelProperty(example = "hh:mm:ss hour - 0 to 23\r\n"
 			+ "minute - 0 to 59\r\n"
 			+ "second - 0 to 59")
-	protected Time orderTime;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	protected OrderTypeUtils orderType;
+	public Time orderTime;
 
-	public long getId() {
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = true)
+	public OrderTypeUtils orderType;
+
+	public Order(){};
+
+	public Long getId() {
 		return id;
 	}
+
+
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -95,10 +114,22 @@ public abstract  class Order  {
 	public void setOrderType(OrderTypeUtils orderType) {
 		this.orderType = orderType;
 	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerName, id, orderDate, orderTime, orderType, phoneNumber, price);
+		return Objects.hash(customerName, orderTime);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -108,11 +139,17 @@ public abstract  class Order  {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		return Objects.equals(customerName, other.customerName) && id == other.id
-				&& Objects.equals(orderDate, other.orderDate) && Objects.equals(orderTime, other.orderTime)
-				&& orderType == other.orderType && Objects.equals(phoneNumber, other.phoneNumber)
-				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price);
+		return Objects.equals(customerName, other.customerName) && Objects.equals(orderTime, other.orderTime);
 	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", userId=" + userId + ", customerName=" + customerName + ", phoneNumber="
+				+ phoneNumber + ", price=" + price + ", orderDate=" + orderDate + ", orderTime=" + orderTime
+				+ ", orderType=" + orderType + "]";
+	}
+
+
 
 	
 	
