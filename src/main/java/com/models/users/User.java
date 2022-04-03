@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.utils.ServiceUtils.UserTypeUtils;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -39,7 +40,10 @@ public abstract  class User {
 	
 	
 	@Column(nullable = false ,unique = true)
-	public String login;	
+	public String username;	
+	
+	@Column(nullable = false)
+	public String password;
 	
 	@Column(nullable = false ,unique = false)
 	@ApiModelProperty(value = "Min=1, Max=12 ")
@@ -88,12 +92,20 @@ public abstract  class User {
 		this.role = role;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String login) {
+		this.username = login;
 	}
 
 	public boolean isOnlineStatus() {
@@ -102,6 +114,12 @@ public abstract  class User {
 
 	public void setOnlineStatus(boolean onlineStatus) {
 		this.onlineStatus = onlineStatus;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", Username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", onlineStatus=" + onlineStatus + ", role=" + role + "]";
 	}
 
 

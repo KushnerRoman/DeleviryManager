@@ -19,7 +19,7 @@ public class LoginForm {
 	private String username;
 	
 	@NotBlank
-	@Size( min=3 ,max=15)
+	
 	private String password;
 	
 	@NotBlank
@@ -27,11 +27,11 @@ public class LoginForm {
 	private UserTypeUtils role;
 
 	public LoginForm(@NotBlank @Size(min = 3, max = 15) String username,
-			@NotBlank @Size(min = 3, max = 15) String password, @NotBlank UserTypeUtils role) {
-		
+			@NotBlank String password) {
+		role=UserTypeUtils.STORE_MANAGER;
 		this.username = username;
 		this.password = password;
-		this.role = role;
+		
 	}
 
 	public String getUsername() {

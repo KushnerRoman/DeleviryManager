@@ -1,7 +1,5 @@
 package com.springSecurity;
 
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableList;
-
 import com.springSecurity.jwt.JwtAuthEntryPoint;
 import com.springSecurity.jwt.JwtAuthTokenFilter;
 import com.springSecurity.userService.UserDetailsServiceImp;
@@ -74,12 +72,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 	                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 	                .authorizeRequests().antMatchers("/api/auth/**").permitAll() 
-	                .antMatchers("/api/test/**").permitAll() // permit the class of test
+	                .antMatchers("/api/test**").permitAll() // permit the class of test
 	                .antMatchers("/**").permitAll() // permit all the routers after swagger-ui.html
 	                .anyRequest().authenticated();
 
 	        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	    }
+
 	
 	
 	  @Override 
@@ -90,6 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				  	"/configuration/security",
 				  	"/swagger-ui.html",
 				  	"/webjars/**"); 
+		  
+		  
 		  }
 	 
 
@@ -101,14 +102,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(BCryptVersion.$2A);
 	}
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 
 		final CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+		configuration.setAllowedOrigins(List.of("http://localhost:3001"));
 		configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
 		// setAllowCredentials(true) is important, otherwise:
 		// The value of the 'Access-Control-Allow-Origin' header in the response must

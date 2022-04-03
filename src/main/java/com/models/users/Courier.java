@@ -43,7 +43,7 @@ public class Courier extends User implements Serializable{
 		this.role=UserTypeUtils.COURIER;
 		this.firstName=firstName;
 		this.lastName=lastName;
-		this.login=login;
+		this.username=login;
 		this.onlineStatus=false;
 		
 	}

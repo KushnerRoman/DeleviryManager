@@ -14,18 +14,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.controller.api.AuthControllerApi;
 import com.message.request.loginRequest.LoginForm;
 import com.message.responses.JwtResponse;
 import com.springSecurity.jwt.JwtProvider;
 import com.springSecurity.userService.UserPrinciple;
+import com.utils.ApiResponseAnnotations.DefaultApiResponses;
 import com.utils.ServiceUtils.UserTypeUtils;
 
+import io.swagger.annotations.ApiOperation;
 
 
 
-public class AuthController implements AuthControllerApi {
+
+@RestController
+@CrossOrigin(origins ="*" ,maxAge=3600)
+@RequestMapping("/api/auth")
+public class AuthController {
 	
 	
 	@Autowired
@@ -35,8 +48,13 @@ public class AuthController implements AuthControllerApi {
 	@Autowired
 	private JwtProvider jwtProvider;
 
-	@Override
-	public ResponseEntity<?> authenticateUser(@Valid LoginForm loginRequest) {
+	@ApiOperation(value="Login")
+	@DefaultApiResponses
+	@PostMapping(value ="/storeLogin" ,produces = "application/json")	
+
+	public ResponseEntity<?> authenticateUser( @Valid @RequestBody LoginForm loginRequest ) {
+		
+		
 		
 		Authentication authentication=authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -44,10 +62,11 @@ public class AuthController implements AuthControllerApi {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			String jwt=jwtProvider.generateJwtToken(authentication);
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 			
 			UserPrinciple userPrinciple= (UserPrinciple) authentication.getPrincipal();
 			
-			UserTypeUtils role=loginRequest.getRole();
+			UserTypeUtils role=UserTypeUtils.STORE_MANAGER;
 			
 			Collection<? extends GrantedAuthority> authorities =null;
 			

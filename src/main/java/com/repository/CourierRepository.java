@@ -16,7 +16,7 @@ public interface CourierRepository extends JpaRepository<Courier, Long> {
 
 
 
-	public Optional<Courier> findByLoginIgnoreCase(String login);
+	public Optional<Courier> findByUsernameIgnoreCase(String username);
 	
 	
 	

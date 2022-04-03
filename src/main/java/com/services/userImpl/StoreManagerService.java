@@ -38,7 +38,7 @@ public class StoreManagerService implements StoreManagerInf {
 	@Override
 	public boolean existsCourierByLogin(String email) {
 
-		return courierRepo.findByLoginIgnoreCase(email).isPresent();
+		return courierRepo.findByUsernameIgnoreCase(email).isPresent();
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class StoreManagerService implements StoreManagerInf {
 
 	@Override
 	public Courier addNewCourier(Courier couirer) throws CourierExistsException {
-		if(!existsCourierByLogin(couirer.getLogin())) {
+		if(!existsCourierByLogin(couirer.getUsername())) {
 			courierRepo.saveAndFlush(couirer);
 			return couirer;
 		}else {

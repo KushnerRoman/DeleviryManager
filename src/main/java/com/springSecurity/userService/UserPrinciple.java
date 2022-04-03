@@ -44,7 +44,7 @@ public class UserPrinciple implements UserDetails {
     public static UserPrinciple build(User user) {
     	List<GrantedAuthority> authrities = new ArrayList<>(
 				Arrays.asList(new SimpleGrantedAuthority(user.getRole().name())));
-		return new UserPrinciple(user.getId(),user.getLogin() , user.getLastName(), authrities);
+		return new UserPrinciple(user.getId(),user.getUsername() , user.getPassword(), authrities);
 
     }
    

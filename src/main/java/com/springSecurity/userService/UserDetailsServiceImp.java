@@ -1,11 +1,14 @@
 package com.springSecurity.userService;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.models.users.StoreManager;
 import com.models.users.User;
 import com.repository.CourierRepository;
 import com.repository.StoreManagerRepository;
@@ -22,16 +25,17 @@ public class UserDetailsServiceImp implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		
-		if(courierRepo.findByLoginIgnoreCase(login).isPresent()) {
-			User user = courierRepo.findByLoginIgnoreCase(login).get();
+		if(courierRepo.findByUsernameIgnoreCase(login).isPresent()) {
+			User user = courierRepo.findByUsernameIgnoreCase(login).get();
 			return UserPrinciple.build(user);
-		}else if(managerRepo.findByLoginIgnoreCase(login).isPresent()) {
-			User user = managerRepo.findByLoginIgnoreCase(login).get();
+		}else if(managerRepo.findByUsernameIgnoreCase(login).isPresent()) {
+			User user = managerRepo.findByUsernameIgnoreCase(login).get();
+			System.out.println(user.toString());
 			return UserPrinciple.build(user);
 		}
 		
 		
-		return null;
+		return (UserDetails) new LoginException("Error Login " + login);
 	}
 
 }

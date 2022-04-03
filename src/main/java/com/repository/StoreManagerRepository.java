@@ -14,7 +14,7 @@ import com.models.users.User;
 public interface StoreManagerRepository extends JpaRepository<StoreManager, Long> {
 	
 	
-	public Optional<User>findByLoginIgnoreCase(String login);
+	public Optional<User>findByUsernameIgnoreCase(String login);
 	
 	
 
